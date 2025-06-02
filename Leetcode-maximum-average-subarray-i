@@ -1,0 +1,29 @@
+class Solution {
+    // Approach - 2 Sliding Window
+    // TC O(N) SC O(1)
+     public double findMaxAverage(int[] nums, int k) {
+        int sum = 0;
+        // pick the first k sum
+        for(int i = 0; i<k ; i++){
+            sum = sum + nums[i];
+        }
+        double max = (double)sum/k; // first max 
+        for(int i = k ; i<nums.length; i++){
+            sum = sum - nums[i-k] + nums[i];
+            max = Math.max(max, (double)sum/k); 
+        }
+        return max;
+     }
+    // Approach - 1 Brute Force O(N^2)
+    public double findMaxAverageBruteForce(int[] nums, int k) {
+        double max = Double.NEGATIVE_INFINITY;
+        for(int i = 0 ; i<=nums.length-k; i++){
+            int sum = 0;
+            for(int j = i; j<i+k; j++){
+                sum = sum + nums[j];
+            }
+            max = Math.max(max, (double)sum/k);
+        }
+        return max;
+    }
+}
