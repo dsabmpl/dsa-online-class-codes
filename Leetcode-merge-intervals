@@ -1,0 +1,25 @@
+class Solution {
+    //TC - O(N Log N) + O(N)
+// SC - O(N)
+    public int[][] merge(int[][] intervals) {
+        List<int[]> result = new ArrayList<>(); // contains the final interval result
+        Arrays.sort(intervals, (a,b)->Integer.compare(a[0], b[0])); // TC N Log N
+        for(int[] interval : intervals){ // O(N)
+            // there would not be any overlapping
+            // if ur result is empty so that is the first interval
+            // if ur result contains the interval and that interval time is less than the 
+            // current interval so it is a new interval to add so it means no overlapping
+            if(result.isEmpty() || result.get(result.size()-1)[1] < interval[0]){
+                result.add(interval);
+            }
+            else
+            {
+                // Overlapping Case (End Time > Start Time of Next Interval)
+                result.get(result.size()-1)[1] = Math.max(result.get(result.size()-1)[1], interval[1]);
+            }
+            
+            //interval[0] // startTime
+        }
+        return result.toArray(new int[result.size()][]); // List convert into 2-D Array
+    }
+}
