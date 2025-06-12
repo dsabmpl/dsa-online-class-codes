@@ -1,0 +1,25 @@
+class Solution {
+    // TC N^2 SC O(N)
+    static void reverse(Stack<Integer> s) {
+        // Base case
+        if(s.isEmpty()){
+            return ;
+        }
+       
+        int top = s.pop();
+        // Recursion Build
+        reverse(s);
+        // Recursion Fall
+        insertAtBottom(top,  s);
+    }
+    static void insertAtBottom(int topValue, Stack<Integer> stack){
+        if(stack.isEmpty()){
+            stack.push(topValue);
+            return ;
+        }
+        int top = stack.pop();
+        insertAtBottom(topValue, stack);
+        // Recursion / Stack Fall
+        stack.push(top);
+    }
+}
