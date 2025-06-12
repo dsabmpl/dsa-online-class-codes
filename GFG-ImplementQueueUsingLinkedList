@@ -1,0 +1,32 @@
+class MyQueue
+{
+    QueueNode front, rear; // null
+    
+    //Function to push an element into the queue.
+    // TC O(1) SC O(1)
+	void push(int a)
+	{
+	    QueueNode node = new QueueNode(a);
+        // Your code here
+        if(front == null){ // NO LL (Queue) Exist
+            front = rear = node;
+        }
+        else{
+            rear.next = node;
+            rear = node;
+        }
+	}
+	
+    //Function to pop front element from the queue.
+     // TC O(1) SC O(1)
+	int pop()
+	{
+        // Your code here
+        if(front == null){ // NO LL (Queue) Exist
+            return -1;
+        }
+        int data = front.data;
+        front = front.next;
+        return data;
+	}
+}
