@@ -1,0 +1,59 @@
+class Solution {
+    public static String infixToPostfix(String s) {
+        StringBuilder result = new StringBuilder();
+        Stack<Character> stack = new Stack<>();
+        // code here
+        // Scan from left to right
+        for(char ch : s.toCharArray()){
+             // if operand coming put in result
+             if(Character.isLetterOrDigit(ch)){
+                 result.append(ch);
+             }
+             
+             // if ( opening bracket comes so push it ,
+        else if(ch == '('){
+            stack.push(ch);
+        }
+        // if closing comes so pop it.
+        // at the end of the expression pop entire stack 
+        else if(ch ==')'){
+            while(!stack.isEmpty() && stack.peek()!='('){
+                result.append(stack.pop());
+            }
+            stack.pop();
+        }
+             
+     // if operator comes (+- * / etc), check the precedence based on either push or pop it.
+        else {
+            while(!stack.isEmpty() && precedence(ch)<=precedence(stack.peek())){
+                result.append(stack.pop());
+            }
+            stack.push(ch);
+        }           
+               
+        }
+        
+        // Pop the Remaining Operators
+        while(!stack.isEmpty()){
+            result.append(stack.pop());
+        }
+       
+        
+        return result.toString();
+        
+        // precedence ^ 3   * / % 2   + - 1
+        
+    }
+    
+    private static int precedence(char operator){
+        switch(operator){
+            case '+':
+            case '-': return 1;
+            case '*':
+            case '/': return 2;
+            case '^': return 3;    
+            default:
+            return 0;
+        }
+    }
+}
