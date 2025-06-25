@@ -1,0 +1,15 @@
+class Solution {
+    // “If a number is a power of 2, then n & (n-1) will be 0.”
+    /*
+    Let’s test with n = 8
+    n     = 1000
+n - 1 = 0111
+
+n & (n - 1)
+      = 0000 
+    */
+    public boolean isPowerOfTwo(int n) {
+       
+    return (n>0 && (n & (n - 1)) == 0);
+    }
+}
