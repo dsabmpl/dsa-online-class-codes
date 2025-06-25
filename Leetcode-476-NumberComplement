@@ -1,0 +1,7 @@
+class Solution {
+    public int findComplement(int num) {
+        int numberOfBits = Integer.toBinaryString(num).length(); // e.g., 3 for 5
+        int mask = (1 << numberOfBits) - 1;                      // e.g., 111 → 7
+        return num ^ mask;                                       // Flip only the actual bits
+    }
+}
