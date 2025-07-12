@@ -1,0 +1,47 @@
+class Job{
+    int id;
+    int profit ;
+    int deadline;
+    Job(int id, int profit, int deadline){
+        this.id = id;
+        this.profit = profit;
+        this.deadline = deadline;
+    }
+}
+class Solution {
+
+    public ArrayList<Integer> jobSequencing(int[] deadline, int[] profit) {
+        // code here
+        int n = deadline.length;
+        Job jobs[] = new Job[n];
+        
+        // fill the jobs
+        for(int i= 0 ; i<n; i++){
+            jobs[i] = new Job(i+1, profit[i], deadline[i]);
+        }
+        // Sort by Profit
+        Arrays.sort(jobs, (a,b)->b.profit - a.profit);
+        boolean slots[] = new boolean[n + 1]; // fill with false
+        int countJobs = 0;
+        int maxProfit = 0;
+        
+        for(Job job : jobs){
+            for(int j = job.deadline; j>0; j--){
+                if(!slots[j]){
+                        slots[j] = true; // book the slot
+                        countJobs++;
+                        maxProfit = maxProfit + job.profit;
+                        break;
+                }
+            }
+        }
+        
+        ArrayList<Integer> result = new ArrayList<>();
+        result.add(countJobs);
+        result.add(maxProfit);
+        return result;
+        
+        
+        
+    }
+}
