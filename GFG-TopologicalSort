@@ -1,0 +1,108 @@
+// class Solution {
+//     public static ArrayList<Integer> topoSort(int V, int[][] edges) {
+//         // code here
+//         ArrayList<Integer> result = new ArrayList<>();
+//         // step - 1 matrix convert it into adjacency list
+//         ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
+//         // adding vertex / node
+//         for(int i = 0; i<V ; i++){
+//             graph.add(new ArrayList<>());
+//         }
+        
+//         // adding edges/ connections
+//         for(int [] edge : edges){
+//             int u = edge[0];
+//             int v = edge[1];
+//             graph.get(u).add(v); // u--> v
+//         }
+        
+        
+//         // step - 2 visited array
+//         boolean [] visited = new boolean[V];
+        
+//         // step-3 stack
+//         Stack<Integer> stack = new Stack<>();
+        
+//         // step - 4 DFS of all Nodes and then pop and store in arraylist for output
+//         for(int i = 0 ; i<V; i++){
+//             if(!visited[i]){
+//                 dfs(i, visited , graph, stack);
+//             }
+//         }
+//         while(!stack.isEmpty()){
+//             result.add(stack.pop());
+//         }
+//         return result;
+        
+        
+        
+//     }
+    
+//     static void dfs(int currentNode, boolean[] visited ,  ArrayList<ArrayList<Integer>> graph, Stack<Integer> stack){
+//         visited[currentNode] = true;
+//         for(int neighbour : graph.get(currentNode)){
+//             if(!visited[neighbour]){
+//                 dfs(neighbour, visited, graph, stack);
+//             }
+//         }
+//         stack.push(currentNode);
+//     }
+// }
+
+
+class Solution {
+    public static ArrayList<Integer> topoSort(int V, int[][] edges) {
+        // code here
+        ArrayList<Integer> result = new ArrayList<>();
+        // step - 1 matrix convert it into adjacency list
+        ArrayList<ArrayList<Integer>> graph = new ArrayList<>();
+        // adding vertex / node
+        for(int i = 0; i<V ; i++){
+            graph.add(new ArrayList<>());
+        }
+        
+        // adding edges/ connections
+        for(int [] edge : edges){
+            int u = edge[0];
+            int v = edge[1];
+            graph.get(u).add(v); // u--> v
+        }
+        
+        
+        // step - 2 create in degree array
+       int [] indegree = new int[V];
+       for(int u = 0; u<V; u++){
+           for(int v : graph.get(u)){
+               indegree[v]++;
+           }
+       }
+       
+       // Process the vertex which has 0 indegree
+       Queue<Integer> queue = new LinkedList<>();
+       
+       for(int i =0 ; i<V; i++){
+           if(indegree[i] ==0){
+               queue.add(i); // add these vertex which has 0 indegree
+           }
+       }
+       while(!queue.isEmpty()){
+           int current = queue.poll(); 
+           result.add(current); 
+           for(int neighbour : graph.get(current)){
+               indegree[neighbour]--; 
+               if(indegree[neighbour]==0){
+                   queue.add(neighbour);
+               }
+           }
+       }
+       
+       
+       
+        return result;
+        
+        
+        
+    }
+    
+   
+}
