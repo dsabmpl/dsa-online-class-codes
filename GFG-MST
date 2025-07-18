@@ -1,0 +1,53 @@
+    class Solution {
+    
+        static class Pair {
+            int weight; // weight of edge
+            int node;   // destination node
+    
+            Pair(int weight, int node) {
+                this.weight = weight;
+                this.node = node;
+            }
+        }
+    
+        static int spanningTree(int V, int E, List<List<int[]>> adj) {
+            // Total weight of the MST
+            int totalWeight = 0;
+    
+            // To mark which nodes are already included in MST
+            boolean[] visited = new boolean[V];
+    
+            // PriorityQueue to always pick the edge with the minimum weight
+            PriorityQueue<Pair> pq = new PriorityQueue<>((a, b) -> a.weight - b.weight);
+    
+            // Start with node 0 (you can start with any node)
+            pq.add(new Pair(0, 0));  // (weight, node)
+    
+            while (!pq.isEmpty()) {
+                Pair current = pq.poll();  // Pick edge with minimum weight
+                int wt = current.weight;
+                int u = current.node;
+    
+                //  the node is already visited, skip it
+                if (visited[u]) continue;
+    
+                // Add weight to total MST weight
+                totalWeight += wt;
+                visited[u] = true;  // Mark node as visited (included in MST)
+    
+                // Visit all neighbors of current node
+                for (int[] neighbor : adj.get(u)) {
+                    int v = neighbor[0]; // neighbor node
+                    int edgeWeight = neighbor[1]; // weight of edge u-v
+    
+                    // If neighbor is not in MST, add it to priority queue
+                    if (!visited[v]) {
+                        pq.add(new Pair(edgeWeight, v));
+                    }
+                }
+            }
+    
+            // Return total weight of MST
+            return totalWeight;
+        }
+    }
