@@ -1,0 +1,75 @@
+class Solution {
+
+    //  This class helps us group vertices using Disjoint Set (Union-Find)
+    static class DSU {
+        int[] parent;  // 💡 parent[i] tells us the leader (representative) of node i
+        int[] rank;    // 💡 rank[i] helps keep the tree flat (optimization)
+
+        //  Constructor: Initially, each node is its own leader
+        DSU(int n) {
+            parent = new int[n];
+            rank = new int[n];
+            for (int i = 0; i < n; i++) {
+                parent[i] = i;  // each node is its own parent at the start
+                rank[i] = 0;    // all ranks are 0 initially
+            }
+        }
+
+        //  Find the leader of the set where x belongs (with path compression)
+        int find(int x) {
+            if (parent[x] != x) {
+                // If x is not its own leader, go up to find the leader
+                parent[x] = find(parent[x]);  // 💥 path compression step (shortcut)
+            }
+            return parent[x];  // return the leader
+        }
+
+        //  Merge the groups of x and y (if they're in different sets)
+        void union(int x, int y) {
+            int px = find(x);  // find leader of x
+            int py = find(y);  // find leader of y
+
+            if (px == py) return;  // already in same group, no need to merge
+
+            // 🧠 attach smaller rank tree under larger rank tree
+            if (rank[px] < rank[py]) {
+                parent[px] = py;  // make y the leader
+            } else if (rank[px] > rank[py]) {
+                parent[py] = px;  // make x the leader
+            } else {
+                parent[py] = px;   // make x the leader (randomly)
+                rank[px]++;        // increase rank of new leader
+            }
+        }
+    }
+
+    //  Main function to find MST weight using Kruskal’s Algorithm
+    static int kruskalsMST(int V, int[][] edges) {
+        // Step 1: Sort all edges by their weights (smallest weight first)
+        Arrays.sort(edges, (a, b) -> a[2] - b[2]);
+
+        DSU dsu = new DSU(V);     // Step 2: Create Disjoint Set for all V nodes
+        int mstWeight = 0;        // Total weight of the MST
+        int count = 0;            // Number of edges included in the MST
+
+        // Step 3: Loop over all sorted edges
+        for (int[] edge : edges) {
+            int u = edge[0];      // starting point of edge
+            int v = edge[1];      // ending point of edge
+            int wt = edge[2];     // weight of edge
+
+            // Step 4: Check if including this edge will form a cycle
+            if (dsu.find(u) != dsu.find(v)) {
+                dsu.union(u, v);     // merge the two sets
+                mstWeight += wt;     // add weight to total
+                count++;             // count this edge
+
+                // If we have added V-1 edges, MST is complete
+                if (count == V - 1) break;
+            }
+        }
+
+        // Return the total weight of the MST
+        return mstWeight;
+    }
+}
