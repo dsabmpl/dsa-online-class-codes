@@ -1,0 +1,57 @@
+class Pair {
+    int node;
+    int dist;
+    Pair(int node, int dist) {
+        this.node = node;
+        this.dist = dist;
+    }
+}
+
+class Solution {
+    public int[] dijkstra(int V, int[][] edges, int src) {
+        // Step 1: Create graph using adjacency list
+        ArrayList<ArrayList<Pair>> graph = new ArrayList<>();
+        for (int i = 0; i < V; i++) {
+            graph.add(new ArrayList<>());
+        }
+
+        // Fill the graph
+        for (int[] edge : edges) {
+            int u = edge[0];
+            int v = edge[1];
+            int wt = edge[2];
+
+            graph.get(u).add(new Pair(v, wt));
+            graph.get(v).add(new Pair(u, wt)); // because graph is undirected
+        }
+
+        // Step 2: Distance array (answer)
+        int[] dist = new int[V];
+        Arrays.fill(dist, Integer.MAX_VALUE); // Set all distances to infinity
+        dist[src] = 0; // Distance to source is always 0
+
+        // Step 3: Min heap to pick nearest city
+        PriorityQueue<Pair> pq = new PriorityQueue<>((a, b) -> a.dist - b.dist);
+        pq.add(new Pair(src, 0)); // Start from source
+
+        // Step 4: Dijkstra’s loop
+        while (!pq.isEmpty()) {
+            Pair current = pq.poll();
+            int u = current.node;
+
+            // Traverse all neighbors
+            for (Pair neighbor : graph.get(u)) {
+                int v = neighbor.node;
+                int wt = neighbor.dist;
+
+                // If going through u is shorter, update
+                if (dist[u] + wt < dist[v]) {
+                    dist[v] = dist[u] + wt;
+                    pq.add(new Pair(v, dist[v])); // add updated distance to PQ
+                }
+            }
+        }
+
+        return dist; // Return the final shortest distances from src to all nodes
+    }
+}
