@@ -1,0 +1,21 @@
+class Solution {
+    public void floydWarshall(int[][] dist) {
+        int V = dist.length;
+
+        // Try every node as a middle point between i and j
+        for (int k = 0; k < V; k++) {
+            for (int i = 0; i < V; i++) {
+                for (int j = 0; j < V; j++) {
+                    // If both i→k and k→j are reachable
+                    if (dist[i][k] != 100000000 && dist[k][j] != 100000000) {
+                        // Check if going through k is better than direct i→j
+                        int newDist = dist[i][k] + dist[k][j];
+                        if (newDist < dist[i][j]) {
+                            dist[i][j] = newDist;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
