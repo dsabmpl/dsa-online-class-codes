@@ -1,0 +1,21 @@
+class Solution {
+    public int longestCommonSubsequence(String text1, String text2) {
+        return helper(text1, text2, text1.length() - 1, text2.length()-1);
+    }
+    int helper(String text1, String text2, int m, int n){
+        // Base case
+        if(m<0 || n<0){
+            return 0;
+        }
+        // First Case if both string last character matched
+        if(text1.charAt(m) == text2.charAt(n)){
+            return 1 + helper(text1, text2, m- 1, n-1);
+        }
+        // Second Case - not matched
+        // option 1: text1 skip
+        int option1 = helper(text1, text2, m-1, n);
+        // option 2: text2 skip
+        int option2 = helper(text1, text2, m, n-1);
+        return Math.max(option1, option2);
+    }
+}
